@@ -29,6 +29,10 @@ static bool set_mode(uint8_t mode)
             #endif
             break;
 
+        case VIENA:
+            success = viena_init(ignore_checks);
+            break;
+
         case STABILIZE:
             #if FRAME_CONFIG == HELI_FRAME
                 success = heli_stabilize_init(ignore_checks);
@@ -133,6 +137,10 @@ static void update_flight_mode()
             #else
                 acro_run();
             #endif
+            break;
+
+        case VIENA:
+            viena_run();
             break;
 
         case STABILIZE:
@@ -270,7 +278,7 @@ static bool manual_flight_mode(uint8_t mode) {
 // mode_allows_arming - returns true if vehicle can be armed in the specified mode
 //  arming_from_gcs should be set to true if the arming request comes from the ground station
 static bool mode_allows_arming(uint8_t mode, bool arming_from_gcs) {
-    if (manual_flight_mode(mode) || mode == LOITER || mode == ALT_HOLD || mode == POSHOLD || (arming_from_gcs && mode == GUIDED)) {
+    if (manual_flight_mode(mode) || mode == LOITER || mode == VIENA || mode == ALT_HOLD || mode == POSHOLD || (arming_from_gcs && mode == GUIDED)) {
         return true;
     }
     return false;
@@ -285,6 +293,9 @@ print_flight_mode(AP_HAL::BetterStream *port, uint8_t mode)
     switch (mode) {
     case STABILIZE:
         port->print_P(PSTR("STABILIZE"));
+        break;
+    case VIENA:
+        port->print_P(PSTR("VIENA"));
         break;
     case ACRO:
         port->print_P(PSTR("ACRO"));
