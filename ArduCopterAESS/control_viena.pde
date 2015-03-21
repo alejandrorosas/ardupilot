@@ -27,7 +27,7 @@ static void viena_run()
         return;
     }
 
-    pos_control.set_alt_target(0);
+    //pos_control.set_alt_target(0);
 
     // convert pilot input into desired vehicle angles or rotation rates
     //   g.rc_1.control_in : pilots roll input in the range -4500 ~ 4500
